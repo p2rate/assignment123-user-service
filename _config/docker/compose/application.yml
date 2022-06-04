@@ -1,0 +1,29 @@
+version: '3'
+
+networks:
+  user-service:
+    external: true
+  microservices:
+    external: true
+
+
+services:
+
+  user-service-api:
+    image: voxcarrier/google-translate-api-api:dev
+    build:
+      context: ../images/api
+      dockerfile: Dockerfile
+
+    container_name: user-service-api
+    hostname: user-service-api
+#    command: "/scripts/run-java.sh"
+#    volumes:
+#      -
+
+    networks:
+      - user-service
+      - microservices
+
+    env_file:
+      - "../env/development.env"

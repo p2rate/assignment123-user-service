@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+SCRIPT_DIR="$(dirname "$(perl -e "use Cwd 'abs_path';print abs_path('${BASH_SOURCE[0]}');")" )"
+PROJECT_ROOT="${PROJECT_ROOT:-"$(dirname "${SCRIPT_DIR}")"}"
+APPLICATION_COMPOSE_FILE="${PROJECT_ROOT}/_config/docker/compose/api-application.yml"
+SERVICES_COMPOSE_FILE="${PROJECT_ROOT}/_config/docker/compose/api-services.yml"
+
+
+function bin::start() {
+  # ----------------------------------------------------------------------------
+  # EXECUTION
+  # ----------------------------------------------------------------------------
+  lib::logger::info  "Trying to compile application services."
+
+  if [[ -n "$(command -v docker-compose)" ]]; then
+    lib::logger::info "Staring application services."
+
+    (
+      cd "${PROJECT_ROOT}" || { lib::logger::error "Couldn't navigate to PROJECT_ROOT"; exit 1; }
+      "${PROJECT_ROOT}/"gradlew bootJar
+    )
+
+    docker-compose -f "${SERVICES_COMPOSE_FILE}" up -d
+    sleep 30
+    docker-compose -f "${APPLICATION_COMPOSE_FILE}" build
+    docker-compose -f "${APPLICATION_COMPOSE_FILE}" up -d
+  else
+    # --------------------------------------------------------------------------
+    # ERROR LOG
+    # --------------------------------------------------------------------------
+    lib::logger::error "'docker-compose' was not found on system."
+    exit 1
+  fi
+}
+readonly -f bin::app::start
+
+bin::start "$@"

@@ -1,0 +1,26 @@
+version: '3'
+
+networks:
+  user-service:
+    external: true
+
+services:
+
+  user-service-db:
+    image: mariadb:latest
+    container_name: user-service-db
+    hostname: user-service-db
+
+    networks:
+      - user-service
+
+    ports:
+      - 3306:3306
+
+    volumes:
+      - "../volumes/mysql:/var/lib/mysql"
+
+    env_file:
+      - "../env/development.env"
+
+

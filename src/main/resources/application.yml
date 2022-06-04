@@ -1,0 +1,114 @@
+info:
+  app:
+    name: user-service
+    description:
+    version: 1.0.0
+
+# --------------------------------------------------------------------------- #
+# SERVLET PROPERTIES
+# --------------------------------------------------------------------------- #
+server:
+  port: "${US_PORT:8080}"
+  forward-headers-strategy: framework
+  error:
+    include-message: always
+    include-exception: true
+
+# --------------------------------------------------------------------------- #
+# APPLICATION METRICS (ACTUATOR)
+# --------------------------------------------------------------------------- #
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+# --------------------------------------------------------------------------- #
+# APPLICATION LOGGING
+# --------------------------------------------------------------------------- #
+logging:
+  level:
+    org.springframework.security: ${US_SPRING_SECURITY_LOG_LEVEL:warn}
+    com.ashkanzafari: ${US_ASHKANZAFARI_LOG_LEVEL:debug}
+    root: ${US_ROOT_LOG_LEVEL:warn}
+
+# --------------------------------------------------------------------------- #
+# SPRING CONFIGURATION
+# --------------------------------------------------------------------------- #
+
+spring:
+
+  application:
+    name: "user-service"
+
+  # ------------------------------------------------------------------------- #
+  # DATABASE CONFIGURATION
+  # ------------------------------------------------------------------------- #
+  datasource:
+    username: "${CNM_DB_USER:numberManager}"
+    password: "${CNM_DB_PASSWORD:QqAGtg8KTRTmH4s3634DEDzqVSsJYmKr}"
+    url: jdbc:mariadb://${CNM_DB_SERVER:localhost}:${CNM_DB_PORT:3306}/${CNM_DB_NAME:campaign_manager}?createDatabaseIfNotExist=true&characterEncoding=UTF-8
+    driverClassName: "org.mariadb.jdbc.Driver"
+    hikari:
+      maximum-pool-size: ${CNM_MYSQL_POOL_SIZE:100}
+      connection-test-query: "SELECT 1"
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  jpa:
+    open-in-view: false
+    show-sql: false
+    database-platform: org.hibernate.dialect.MariaDB103Dialect
+    hibernate:
+      ddl-auto: update
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyHbmImpl
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+
+    properties:
+
+      hibernate:
+        # --------------------------------------------------------------------
+        # ADDED PROPERTIES FOR DB CREATION
+        # --------------------------------------------------------------------t
+        enable_lazy_load_no_trans: true
+        batchSize: 30
+        orderInserts: true
+        orderUpdates: true
+        connection:
+          cachePrepStmts: true
+          useServerPrepStmts: true
+          rewriteBatchedStatements: true
+          characterEncoding: utf8
+          CharSet: utf8
+          useUnicode: true
+
+# --------------------------------------------------------------------------- #
+# DEFAULT FEIGN CONFIGURATION
+# --------------------------------------------------------------------------- #
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: ${FEIGN_CLIENT_CONNECT_TIMEOUT:5000}
+        readTimeout: ${FEIGN_CLIENT_READ_TIMEOUT:60000}
+
+# --------------------------------------------------------------------------- #
+# URL Configuration FOR FEIGN CLIENTS
+# --------------------------------------------------------------------------- #
+services:
+  syntec:
+    base-url: "${CNM_SYNTEC_BASE_URL:http://207.182.154.244:8908/msisdnutilities}"
+
+
+
+# --------------------------------------------------------------------------- #
+# SpringDoc
+# --------------------------------------------------------------------------- #
+springdoc:
+  swagger-ui:
+    tags-sorter: alpha
+    operations-sorter: alpha
+    doc-expansion: none
+  show-actuator: true
