@@ -1,7 +1,7 @@
 version: '3'
 
 networks:
-  microservices:
+  user-service:
     external: true
 
 services:
@@ -12,7 +12,7 @@ services:
     hostname: user-service-db
 
     networks:
-      - microservices
+      - user-service
 
 #    ports:
 #      - 3306:3306
