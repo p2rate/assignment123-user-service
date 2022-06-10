@@ -45,12 +45,12 @@ spring:
   # DATABASE CONFIGURATION
   # ------------------------------------------------------------------------- #
   datasource:
-    username: "${CNM_DB_USER:numberManager}"
-    password: "${CNM_DB_PASSWORD:QqAGtg8KTRTmH4s3634DEDzqVSsJYmKr}"
-    url: jdbc:mariadb://${CNM_DB_SERVER:localhost}:${CNM_DB_PORT:3306}/${CNM_DB_NAME:campaign_manager}?createDatabaseIfNotExist=true&characterEncoding=UTF-8
+    username: "${US_DB_USER:assignment123-user}"
+    password: "${US_DB_PASSWORD:QqAGtg8KTRTmH4s3634DEDzqVSsJYmKr}"
+    url: jdbc:mariadb://${US_DB_SERVER:localhost}:${US_DB_PORT:3306}/${US_DB_NAME:user-service-db}?createDatabaseIfNotExist=true&characterEncoding=UTF-8
     driverClassName: "org.mariadb.jdbc.Driver"
     hikari:
-      maximum-pool-size: ${CNM_MYSQL_POOL_SIZE:100}
+      maximum-pool-size: ${US_MYSQL_POOL_SIZE:100}
       connection-test-query: "SELECT 1"
       connection-timeout: 30000
       idle-timeout: 600000
@@ -58,7 +58,7 @@ spring:
 
   jpa:
     open-in-view: false
-    show-sql: false
+    show-sql: true
     database-platform: org.hibernate.dialect.MariaDB103Dialect
     hibernate:
       ddl-auto: update
@@ -84,24 +84,6 @@ spring:
           CharSet: utf8
           useUnicode: true
 
-# --------------------------------------------------------------------------- #
-# DEFAULT FEIGN CONFIGURATION
-# --------------------------------------------------------------------------- #
-feign:
-  client:
-    config:
-      default:
-        connectTimeout: ${FEIGN_CLIENT_CONNECT_TIMEOUT:5000}
-        readTimeout: ${FEIGN_CLIENT_READ_TIMEOUT:60000}
-
-# --------------------------------------------------------------------------- #
-# URL Configuration FOR FEIGN CLIENTS
-# --------------------------------------------------------------------------- #
-services:
-  syntec:
-    base-url: "${CNM_SYNTEC_BASE_URL:http://207.182.154.244:8908/msisdnutilities}"
-
-
 
 # --------------------------------------------------------------------------- #
 # SpringDoc
@@ -112,3 +94,60 @@ springdoc:
     operations-sorter: alpha
     doc-expansion: none
   show-actuator: true
+
+
+# --------------------------------------------------------------------------- #
+# Application Specific CONFIGURATION
+# --------------------------------------------------------------------------- #
+app:
+  sys:
+    admin:
+      password: "notaverysecureadminpassword"
+      email: "ashkan.zafari@gmail.com"
+    config:
+      passwordExpiryInDays: 90
+    authentication:
+      expirationInDays: 2
+      aesKey: "averystrongpasswordhahaha!!averystrongpasswordhahaha!!averystrongpasswordhahaha!!"
+      prefix: "Bearer"
+      header: "Authorization"
+      signUpUrl: "/api/login"
+      publicKey: |
+        -----BEGIN PUBLIC KEY-----
+        MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyUyM7w5aUPVDpTPl4Qtx
+        2UXHb3I6ELuq97OPuPrkNp867qNkdksOK9w2aNGk1tRH+f2IEpuM+mTuGQyCXRnL
+        VzMqh/W6kauwBBV/HTYeQvpBjkoK61atrlcdhEWDpYm3X0DHj9sopFz+buzzM9xO
+        xKrMmAGtUDu0Dx8vYn9YmcyCvVmbAuCAlZ42Un2vHfsfJI6eDQMu5J3PyO6WsLDQ
+        VYptvcs7Q4LhcwmA68Koq5sIpLbA1RvaJWeRD+buxX3KOUIp5KMeE1yql1L8McRL
+        tDOeZvV9WqA2BISA7tsBHYqxz3gv6B/7MnMK6gnpsbuinp0vJ4TE5v9VlfoTJCTO
+        EwIDAQAB
+        -----END PUBLIC KEY-----
+      privateKey: |
+        -----BEGIN PRIVATE KEY-----
+        MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDJTIzvDlpQ9UOl
+        M+XhC3HZRcdvcjoQu6r3s4+4+uQ2nzruo2R2Sw4r3DZo0aTW1Ef5/YgSm4z6ZO4Z
+        DIJdGctXMyqH9bqRq7AEFX8dNh5C+kGOSgrrVq2uVx2ERYOlibdfQMeP2yikXP5u
+        7PMz3E7EqsyYAa1QO7QPHy9if1iZzIK9WZsC4ICVnjZSfa8d+x8kjp4NAy7knc/I
+        7pawsNBVim29yztDguFzCYDrwqirmwiktsDVG9olZ5EP5u7Ffco5Qinkox4TXKqX
+        UvwxxEu0M55m9X1aoDYEhIDu2wEdirHPeC/oH/sycwrqCemxu6KenS8nhMTm/1WV
+        +hMkJM4TAgMBAAECggEABC++Yp5mzHY9YOsyZbrKNF2aJzw17vEoPhyS6aL2Khin
+        rhzh0v/+nHTpAMcTaZBiqtVWBiUMCo0c0pKLB4qoyvh6cvduWOc8MumLijz85iG0
+        SVRK49gappyTNZQIh+HUWXvMaraBIuH4PLBa4oI7dSWkOakXRKrpNMNORfsmCZTI
+        zamCL/2A0ouqwXYSlJuJZoireON8MVdNM/mqWNZOO4885uwjycVYqqFu6QnV8FGB
+        +Ohv2a360ncOeY69F1Jf1NRYkDyTG19e7WlbE5BQ3eY8YA4Pxb32Y0ocZIxN8qcx
+        HXddNuZu3gNqeMZ3sgqyNAb+vkS/xqyxcL3wRcYrgQKBgQD2sM0hAtB8fYOV1FVG
+        6oDzd+xEaw55sKG+5sMwuryrAqEL+b10P86yBc4Fgqo4fehOiSd40fB5kRz56c8j
+        XB4bSmj3IQq8mX2rXCglpaiywY+r5EW0tyIDqeU0/Kk8RuXwUQ86Qt3wLCq23zbz
+        O8CethxJtkZcEKZ6/tViXj5pQQKBgQDQ5TxOJO7+o2AQaPdgv5HVo5sGIp8L0jmR
+        rTqNHvbDHmvUrqJl7YQFW+8gCns8f7EreTSb8kwm1a0FGLeyO3VBBPpearrgE8to
+        Q5DryUOFv+jTdyXEiyBDBdJBff12JkDg7JIm/inbnBxJfQfW/8SATDL+X38C9W/v
+        K0NNeD8uUwKBgBq3x1+96EqzZV8C4kGOAG1eHa7DUYwIf1wnrhhHAUwcOskLQWOn
+        zYEmc8vQ/RKlQFXRMP867aqc9uByXEbeITyfcILjh0Ap95xpnMeHC6BgqmjZjlsm
+        Qn7XFcYJX2Lx4tGGVfnfaB4tCmtH/bGWVSRbYPDy1uf9vaowk3fV8TiBAoGBAKmq
+        FlHt44NEVKjfaFTXI26epDHWetFSHNn6Fb068fdGRRSIBnS89eaYZd7jRHa9y7tg
+        hV9H65v7Hr0t9z0216RIk8WN8FxBF4uGnTU00bfXSBZBBpbc3QYyuzPgTbXhmf5V
+        httOwdaRs9PoTi7Mq9/8g8pg67sOd6yMuew5By/rAoGBAJqHtIpQLcBXU264lGwa
+        dytZIlV+G2W+V7+WPqBceOEsMqaf9r3KMmct5D/Q2JULbgHFERnxyCk35PLO+Oei
+        O5ADlZd8G97iIyu+QWcGpLZ26PwfIh92pAqaX4ezOqC6CJGx+ArkaKPkZeL8wNjN
+        TH0IcvSvvygZQZQqYB2Ny8/U
+        -----END PRIVATE KEY-----

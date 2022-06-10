@@ -2,6 +2,8 @@ plugins {
 	id 'org.springframework.boot' version '2.7.0'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+    id "io.freefair.lombok" version "6.0.0-m2"
+
 }
 
 group = 'com.ashkanzafari.assignment123'
@@ -19,10 +21,16 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
     // ----------------------------------------------------------------- //
+    // SPRING SECURITY DEPENDENCIES
+    // ----------------------------------------------------------------- //
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'com.nimbusds:nimbus-jose-jwt:9.11.2'
+
+    // ----------------------------------------------------------------- //
     //  DB DEPENDENCIES
     // ----------------------------------------------------------------- //
-//	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-//	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
     // ----------------------------------------------------------------- //
     //  openAPI DEPENDENCIES
@@ -33,6 +41,22 @@ dependencies {
     //  ACTUATOR DEPENDENCIES
     // ----------------------------------------------------------------- //
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // ----------------------------------------------------------------- //
+    //  APACHE DEPENDENCIES
+    // ----------------------------------------------------------------- //
+    implementation 'commons-codec:commons-codec:1.15'
+
+    // ----------------------------------------------------------------- //
+    //  Validation DEPENDENCIES
+    // ----------------------------------------------------------------- //
+    implementation 'org.passay:passay:1.0'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // ----------------------------------------------------------------- //
+    //  LOMBOK DEPENDENCIES
+    // ----------------------------------------------------------------- //
+    compileOnly 'org.projectlombok:lombok:1.18.24'
 
     // ----------------------------------------------------------------- //
     //  TEST DEPENDENCIES
