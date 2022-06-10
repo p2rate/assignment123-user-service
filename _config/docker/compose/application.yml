@@ -1,8 +1,6 @@
 version: '3'
 
 networks:
-  user-service:
-    external: true
   microservices:
     external: true
 
@@ -24,7 +22,6 @@ services:
       - 8080:8080
 
     networks:
-      - user-service
       - microservices
 
     env_file:
