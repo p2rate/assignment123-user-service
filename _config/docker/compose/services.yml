@@ -14,8 +14,8 @@ services:
     networks:
       - user-service
 
-   ports:
-     - 3306:3306
+    ports:
+      - 3306:3306
 
     volumes:
       - "../volumes/mysql:/var/lib/mysql"
